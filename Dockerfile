@@ -13,22 +13,24 @@ RUN makepkg --force
 USER root
 
 RUN pacman --upgrade --noconfirm --noprogressbar php-*-x86_64.pkg.tar.xz
+RUN pacman -Scc --noconfirm --noprogressbar apache
+#RUN systemctl start httpd
 
 COPY ./php/php.ini /etc/php/php.ini
 
 USER build
 
+COPY ./httpd/httpd.conf /etc/httpd/conf/httpd.conf
+# COPY ./httpd/public-html/ /srv/http/
+COPY ./httpd/public-html/ /var/www/html
+EXPOSE 80/tcp
+EXPOSE 443/tcp
 CMD ["php"]
-# PHP end config
-
-# Apache start config  
-FROM httpd:2.4
-
-COPY ./httpd/public-html/ /usr/local/apache2/htdocs/
 # Apache end config 
 
 # mySQL start config
 FROM mysql/mysql-server:5.5
 RUN  yum install -y vim
 COPY ./mysql/my.cnf /etc/mysql/my.cnf
+EXPOSE 3306/tcp
 # mySQL end config

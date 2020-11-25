@@ -22,10 +22,10 @@ USER build
 
 COPY ./httpd/httpd.conf /etc/httpd/conf/httpd.conf
 # COPY ./httpd/public-html/ /srv/http/
-COPY ./httpd/public-html/ /var/www/html
-EXPOSE 80/tcp
-EXPOSE 443/tcp
+VOLUME ./httpd/public-html/ /var/www/html
+EXPOSE 80 443
 CMD ["php"]
+CMD ["./httpd/start.sh"]
 # Apache end config 
 
 # mySQL start config

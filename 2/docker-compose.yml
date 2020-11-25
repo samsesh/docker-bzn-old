@@ -1,0 +1,27 @@
+version: '3.2'
+
+services:
+  website:
+    image: romeoz/docker-apache-php:5.5
+    volumes:
+      - ./app:/var/www/app
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+    networks:
+      - web
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.platform.os == linux]
+
+networks:
+  web:
+    driver: overlay
+    attachable: true
